@@ -113,6 +113,7 @@ func renderAll() {
 	renderText(1, 70, termbox.ColorWhite, termbox.ColorDefault, "CELLULAR AUTOMATON - V2") //TITLE
 	renderRect(3, 49, 3, 139, termbox.ColorBlue, true)
 	renderRect(3, 49, 145, 180, termbox.ColorYellow, false) //ARMOUR
+	renderText(4, 148, termbox.ColorWhite, termbox.ColorDefault, "Type in like this: 1,2,3")
 	renderText(5, 148, termbox.ColorWhite, termbox.ColorRed, tryinput)
 	renderText(6, 148, termbox.ColorWhite, termbox.ColorDefault, rawinput)
 	renderText(7, 148, termbox.ColorWhite, termbox.ColorDefault, "B RULES: "+dstring)
@@ -241,8 +242,10 @@ func main() {
 							rawinput = ""
 							tryinput = "S rule: " + rawinput
 							ruleB := strings.Split(dstring, ",")
+							d = []int{}
 							for indexx := range ruleB {
 								integer, _ := strconv.Atoi(ruleB[indexx])
+
 								d = append(d, integer)
 							}
 						case true:
@@ -250,6 +253,7 @@ func main() {
 							inputkey = false
 							adjuststring(&lstring, rawinput)
 							ruleS := strings.Split(lstring, ",")
+							l = []int{}
 							for indexxx := range ruleS {
 								integer2, _ := strconv.Atoi(ruleS[indexxx])
 								l = append(l, integer2)
@@ -280,6 +284,7 @@ func main() {
 						case true:
 							inputkey = false
 						}
+
 						tryinput = "B rule: " + rawinput
 					}
 				}
