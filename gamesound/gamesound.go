@@ -10,6 +10,8 @@ import (
 	"github.com/faiface/beep/speaker"
 )
 
+//Not used in the application. But you can add music to it using this. 
+
 var streamer beep.StreamSeekCloser
 var format beep.Format
 var stop = make(chan bool)
