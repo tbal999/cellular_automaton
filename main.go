@@ -170,7 +170,7 @@ func reset(world *[][]object.Lifeform) {
 }
 
 func main() {
-	world = object.Newworld(50, 140)
+	world = object.Newworld(65, 185)
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
