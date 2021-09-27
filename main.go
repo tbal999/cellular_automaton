@@ -1,7 +1,6 @@
 package main
 
 import (
-	"corridors/gamesound"
 	"corridors/object"
 	"fmt"
 	"strconv"
@@ -170,9 +169,7 @@ func reset(world *[][]object.Lifeform) {
 }
 
 func main() {
-	//Scanner := bufio.NewScanner(os.Stdin)
 	world = object.Newworld(50, 140)
-	//go gamesound.Play("main")
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
@@ -221,7 +218,6 @@ func main() {
 						timer -= 50
 					}
 					Frame = time.NewTicker(time.Duration(timer) * time.Millisecond)
-					//gamesound.Up()
 				}
 				if ev.Key == termbox.KeyArrowRight {
 					if timer <= 500 {
@@ -231,7 +227,6 @@ func main() {
 						timer += 30
 					}
 					Frame = time.NewTicker(time.Duration(timer) * time.Millisecond)
-					//gamesound.Down()
 				}
 				if inputkey == true {
 					if ev.Key == termbox.KeyEnter {
