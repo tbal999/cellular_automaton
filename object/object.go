@@ -27,7 +27,7 @@ func Newworld(y, x int) [][]Lifeform {
 	return w
 }
 
-//Checks to see if the item in array is one away from the edge to prevent indexing errors
+// Check to see if the item in array is one away from the edge to prevent indexing errors
 func check(x, y int, z [][]Lifeform) int {
 	switcher := ""
 	xaxis := x == len(z[0])-1
@@ -81,13 +81,13 @@ func check(x, y int, z [][]Lifeform) int {
 	return 9 //ignore
 }
 
-//Adjusts lifeform state depending on where it is using the 'check' function'
+// Adjust lifeform state depending on where it is using the 'check' function'
 func Adjust(world *[][]Lifeform, l, d []int) {
 	i := *world
 	for y := range i {
 		for x := range i[y] {
 			switch check(x, y, i) {
-			case 0:
+			case 0: // in the middle
 				i[y][x].Next = state(i[y][x],
 					i[y-1][x-1],
 					i[y-1][x],
@@ -97,7 +97,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 					i[y+1][x+1],
 					i[y][x-1],
 					i[y][x+1], l, d)
-			case 1:
+			case 1: // y is 0
 				i[y][x].Next = state(i[y][x],
 					i[len(i)-1][x-1],
 					i[len(i)-1][x],
@@ -107,7 +107,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 					i[y+1][x+1],
 					i[y][x-1],
 					i[y][x+1], l, d)
-			case 2:
+			case 2: // x is 0
 				i[y][x].Next = state(i[y][x],
 					i[y-1][len(i[y])-1],
 					i[y-1][x],
@@ -117,7 +117,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 					i[y+1][x+1],
 					i[y][len(i[y])-1],
 					i[y][x+1], l, d)
-			case 3:
+			case 3: // y & x is 0
 				i[y][x].Next = state(i[y][x],
 					i[len(i)-1][len(i[y])-1],
 					i[len(i)-1][x],
@@ -127,7 +127,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 					i[y+1][x+1],
 					i[y][len(i[y])-1],
 					i[y][x+1], l, d)
-			case 4:
+			case 4: // y is end
 				i[y][x].Next = state(i[y][x],
 					i[y-1][x-1],
 					i[y-1][x],
@@ -137,7 +137,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 					i[0][x+1],
 					i[y][x-1],
 					i[y][x+1], l, d)
-			case 5:
+			case 5: // y is end and x is 0
 				i[y][x].Next = state(i[y][x],
 					i[y-1][len(i[y])-1],
 					i[y-1][x],
@@ -147,7 +147,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 					i[0][x+1],
 					i[y][len(i[y])-1],
 					i[y][x+1], l, d)
-			case 6:
+			case 6: // x is end
 				i[y][x].Next = state(i[y][x],
 					i[y-1][x-1],
 					i[y-1][x],
@@ -183,8 +183,7 @@ func Adjust(world *[][]Lifeform, l, d []int) {
 	*world = i
 }
 
-//Adjusts the state of the lifeform's next cycle depending on whether they're alive or not.
-//You can change this function and get different results.
+// Adjusts the state of the lifeform's next cycle depending on whether they're alive or not.
 func state(a, b, c, d, e, f, g, h, i Lifeform, live, dead []int) int {
 	total := b.Alive + c.Alive + d.Alive + e.Alive + f.Alive + g.Alive + h.Alive + i.Alive
 	switch a.Alive {
