@@ -122,7 +122,7 @@ func renderAll() {
 	renderText(14, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'up arrow' to pause world")
 	renderText(15, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'left arrow' to speed up")
 	renderText(16, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'right arrow' to slow down")
-	renderText(16, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'ctrl-c' to quit")
+	renderText(17, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'ctrl-c' to quit")
 	timertext := fmt.Sprintf("Speed: %d ms per frame", timer)
 	renderText(18, 148, termbox.ColorWhite, termbox.ColorDefault, timertext)
 	renderText(20, 148, termbox.ColorWhite, termbox.ColorDefault, "Example rules (B / S):")
