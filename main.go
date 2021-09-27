@@ -170,7 +170,7 @@ func reset(world *[][]object.Lifeform) {
 }
 
 func main() {
-	world = object.Newworld(65, 185)
+	world = object.Newworld(50, 140)
 	err := termbox.Init()
 	if err != nil {
 		panic(err)
@@ -269,7 +269,7 @@ func main() {
 			if ev.Type == termbox.EventMouse {
 				if ev.Key == termbox.MouseLeft {
 					mouseX, mouseY = ev.MouseX, ev.MouseY
-					if mouseX < 130 && mouseY < 40 {
+					if mouseX < 140 && mouseY < 50 {
 						setToOne(mouseX, mouseY, &world, true)
 					}
 					if mouseX > 147 && mouseX < 176 && mouseY == 5 {
