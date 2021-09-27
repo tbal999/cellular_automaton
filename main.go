@@ -122,6 +122,7 @@ func renderAll() {
 	renderText(14, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'up arrow' to pause world")
 	renderText(15, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'left arrow' to speed up")
 	renderText(16, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'right arrow' to slow down")
+	renderText(16, 148, termbox.ColorWhite, termbox.ColorDefault, "Press 'ctrl-c' to quit")
 	timertext := fmt.Sprintf("Speed: %d ms per frame", timer)
 	renderText(18, 148, termbox.ColorWhite, termbox.ColorDefault, timertext)
 	renderText(20, 148, termbox.ColorWhite, termbox.ColorDefault, "Example rules (B / S):")
@@ -175,7 +176,7 @@ func main() {
 		panic(err)
 	}
 	Frame := time.NewTicker(time.Duration(timer) * time.Millisecond)
-	termbox.SetInputMode(termbox.InputEsc | termbox.InputMouse | termbox.InputAlt)
+	termbox.SetInputMode(termbox.InputMouse | termbox.InputAlt)
 	eventQueue := make(chan termbox.Event)
 	regenerateBuffer(65, 185)
 	termbox.Flush()
@@ -191,7 +192,7 @@ func main() {
 				regenerateBuffer(termbox.Size())
 			}
 			if ev.Type == termbox.EventKey {
-				if ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC {
+				if ev.Key == termbox.KeyCtrlC {
 					gameover = true
 					termbox.Close()
 				}
