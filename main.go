@@ -65,7 +65,7 @@ func renderRect(y1, y2, x1, x2 int, colour termbox.Attribute, pen bool) {
 				termbox.SetCell(xindex, yindex, 'x', colour, colour)
 			}
 			if yindex != y1 && yindex != y2 && xindex != x1 && xindex != x2 {
-				if pen == true {
+				if pen {
 					if world[yindex][xindex].Alive == 1 {
 						termbox.SetCell(xindex, yindex, 'x', termbox.ColorRed, termbox.ColorRed)
 					}
@@ -133,7 +133,7 @@ func renderAll() {
 	renderText(27, 148, termbox.ColorWhite, termbox.ColorDefault, "3/1,2,3,4,5 - Maze")
 	renderText(28, 148, termbox.ColorWhite, termbox.ColorDefault, "3,6,8/2,4,5 - Move")
 	renderText(29, 148, termbox.ColorWhite, termbox.ColorDefault, "1/1 - Gnarl")
-	if pausegame != true {
+	if pausegame {
 		renderLife(4, 48, 4, 138, termbox.ColorBlue, false) //MAIN
 	}
 	termbox.Flush()
@@ -184,14 +184,14 @@ func main() {
 			eventQueue <- termbox.PollEvent()
 		}
 	}()
-	for gameover == false {
+	for !gameover {
 		select {
 		case ev := <-eventQueue:
 			if ev.Type == termbox.EventResize {
 				regenerateBuffer(termbox.Size())
 			}
 			if ev.Type == termbox.EventKey {
-				if ev.Key == termbox.KeyEsc {
+				if ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC {
 					gameover = true
 					termbox.Close()
 				}
@@ -228,7 +228,7 @@ func main() {
 					}
 					Frame = time.NewTicker(time.Duration(timer) * time.Millisecond)
 				}
-				if inputkey == true {
+				if inputkey {
 					if ev.Key == termbox.KeyEnter {
 						switch secondoption {
 						case false:
@@ -268,8 +268,7 @@ func main() {
 			if ev.Type == termbox.EventMouse {
 				if ev.Key == termbox.MouseLeft {
 					mouseX, mouseY = ev.MouseX, ev.MouseY
-					if mouseX < 140 && mouseY < 50 {
-						//test = fmt.Sprintf("%d, %d", mouseX, mouseY)
+					if mouseX < 130 && mouseY < 40 {
 						setToOne(mouseX, mouseY, &world, true)
 					}
 					if mouseX > 147 && mouseX < 176 && mouseY == 5 {
