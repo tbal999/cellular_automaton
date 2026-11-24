@@ -1,204 +1,83 @@
+// Package object holds the cellular automaton world and its update rules.
 package object
 
+// Lifeform is one cell.
+//
+// Alive is the cell's state: 0 = dead, 1 = alive, and for Generations rules
+// (States > 2) values 2..States-1 are "dying" states that the cell passes
+// through on its way back to dead. Only state 1 counts as a live neighbour.
+//
+// Still counts how long the cell has been alive (capped), and is used to
+// colour older cells differently.
 type Lifeform struct {
 	Alive int
 	Next  int
 	Still int
 }
 
+// MaxStill caps the age counter.
+const MaxStill = 62
+
 func Newlife() Lifeform {
-	x := Lifeform{0, 0, 0}
-	return x
+	return Lifeform{}
 }
 
-func Newline(x int) []Lifeform {
-	l := []Lifeform{}
-	for i := 0; i <= x; i++ {
-		l = append(l, Newlife())
-	}
-	return l
-}
-
-func Newworld(y, x int) [][]Lifeform {
-	w := [][]Lifeform{}
-	for i := 0; i <= y; i++ {
-		w = append(w, Newline(x))
+// Newworld returns a height x width grid of dead cells.
+func Newworld(height, width int) [][]Lifeform {
+	w := make([][]Lifeform, height)
+	for y := range w {
+		w[y] = make([]Lifeform, width)
 	}
 	return w
 }
 
-// Check to see if the item in array is one away from the edge to prevent indexing errors
-func check(x, y int, z [][]Lifeform) int {
-	switcher := ""
-	xaxis := x == len(z[0])-1
-	yaxis := y == len(z)-1
-	isxzero := x == 0
-	isyzero := y == 0
-	switch xaxis {
-	case true:
-		switcher += "y"
-	case false:
-		switcher += "n"
-	}
-	switch yaxis {
-	case true:
-		switcher += "y"
-	case false:
-		switcher += "n"
-	}
-	switch isxzero {
-	case true:
-		switcher += "y"
-	case false:
-		switcher += "n"
-	}
-	switch isyzero {
-	case true:
-		switcher += "y"
-	case false:
-		switcher += "n"
-	}
-	switch switcher {
-	case "nnnn":
-		return 0
-	case "nnny":
+func live(c *Lifeform) int {
+	if c.Alive == 1 {
 		return 1
-	case "nnyn":
-		return 2
-	case "nnyy":
-		return 3
-	case "nynn":
-		return 4
-	case "nyyn":
-		return 5
-	case "ynnn":
-		return 6
-	case "ynny":
-		return 7
-	case "yynn":
-		return 8
-	}
-	return 9 //ignore
-}
-
-// Adjust lifeform state depending on where it is using the 'check' function'
-func Adjust(world *[][]Lifeform, l, d []int) {
-	i := *world
-	for y := range i {
-		for x := range i[y] {
-			switch check(x, y, i) {
-			case 0: // in the middle
-				i[y][x].Next = state(i[y][x],
-					i[y-1][x-1],
-					i[y-1][x],
-					i[y-1][x+1],
-					i[y+1][x-1],
-					i[y+1][x],
-					i[y+1][x+1],
-					i[y][x-1],
-					i[y][x+1], l, d)
-			case 1: // y is 0
-				i[y][x].Next = state(i[y][x],
-					i[len(i)-1][x-1],
-					i[len(i)-1][x],
-					i[len(i)-1][x+1],
-					i[y+1][x-1],
-					i[y+1][x],
-					i[y+1][x+1],
-					i[y][x-1],
-					i[y][x+1], l, d)
-			case 2: // x is 0
-				i[y][x].Next = state(i[y][x],
-					i[y-1][len(i[y])-1],
-					i[y-1][x],
-					i[y-1][x+1],
-					i[y+1][len(i[y])-1],
-					i[y+1][x],
-					i[y+1][x+1],
-					i[y][len(i[y])-1],
-					i[y][x+1], l, d)
-			case 3: // y & x is 0
-				i[y][x].Next = state(i[y][x],
-					i[len(i)-1][len(i[y])-1],
-					i[len(i)-1][x],
-					i[len(i)-1][x+1],
-					i[y+1][len(i[y])-1],
-					i[y+1][x],
-					i[y+1][x+1],
-					i[y][len(i[y])-1],
-					i[y][x+1], l, d)
-			case 4: // y is end
-				i[y][x].Next = state(i[y][x],
-					i[y-1][x-1],
-					i[y-1][x],
-					i[y-1][x+1],
-					i[0][x-1],
-					i[0][x],
-					i[0][x+1],
-					i[y][x-1],
-					i[y][x+1], l, d)
-			case 5: // y is end and x is 0
-				i[y][x].Next = state(i[y][x],
-					i[y-1][len(i[y])-1],
-					i[y-1][x],
-					i[y-1][x+1],
-					i[0][len(i[y])-1],
-					i[0][x],
-					i[0][x+1],
-					i[y][len(i[y])-1],
-					i[y][x+1], l, d)
-			case 6: // x is end
-				i[y][x].Next = state(i[y][x],
-					i[y-1][x-1],
-					i[y-1][x],
-					i[y-1][0],
-					i[y+1][x-1],
-					i[y+1][x],
-					i[y+1][0],
-					i[y][x-1],
-					i[y][0], l, d)
-			case 7:
-				i[y][x].Next = state(i[y][x],
-					i[len(i)-1][x-1],
-					i[len(i)-1][x],
-					i[len(i)-1][0],
-					i[y+1][x-1],
-					i[y+1][x],
-					i[y+1][0],
-					i[y][x-1],
-					i[y][0], l, d)
-			case 8:
-				i[y][x].Next = state(i[y][x],
-					i[y-1][x-1],
-					i[y-1][x],
-					i[y-1][0],
-					i[0][x-1],
-					i[0][x],
-					i[0][0],
-					i[y][x-1],
-					i[y][0], l, d)
-			}
-		}
-	}
-	*world = i
-}
-
-// Adjusts the state of the lifeform's next cycle depending on whether they're alive or not.
-func state(a, b, c, d, e, f, g, h, i Lifeform, live, dead []int) int {
-	total := b.Alive + c.Alive + d.Alive + e.Alive + f.Alive + g.Alive + h.Alive + i.Alive
-	switch a.Alive {
-	case 1:
-		for index := range live {
-			if live[index] == total {
-				return 1
-			}
-		}
-	case 0:
-		for index := range dead {
-			if dead[index] == total {
-				return 1
-			}
-		}
 	}
 	return 0
+}
+
+// Adjust computes every cell's Next state from the current states. The grid
+// wraps at the edges (toroidal); only state 1 counts as a live neighbour.
+func Adjust(world [][]Lifeform, rule Rule) {
+	h := len(world)
+	if h == 0 || len(world[0]) == 0 {
+		return
+	}
+	w := len(world[0])
+	birth, survive := rule.tables()
+	for y := range world {
+		up, row, down := world[(y-1+h)%h], world[y], world[(y+1)%h]
+		for x := range row {
+			l, r := x-1, x+1
+			if l < 0 {
+				l = w - 1
+			}
+			if r == w {
+				r = 0
+			}
+			n := live(&up[l]) + live(&up[x]) + live(&up[r]) +
+				live(&row[l]) + live(&row[r]) +
+				live(&down[l]) + live(&down[x]) + live(&down[r])
+			row[x].Next = rule.nextFast(row[x].Alive, n, &birth, &survive)
+		}
+	}
+}
+
+// Step commits each cell's computed Next state and updates its age counter.
+func Step(world [][]Lifeform) {
+	for y := range world {
+		for x := range world[y] {
+			c := &world[y][x]
+			c.Alive = c.Next
+			if c.Alive == 1 {
+				if c.Still < MaxStill {
+					c.Still++
+				}
+			} else if c.Still > 0 {
+				c.Still--
+			}
+		}
+	}
 }

@@ -1,8 +1,14 @@
-module corridors
+module cellular_automaton
 
-go 1.14
+go 1.25
+
+require github.com/gdamore/tcell/v2 v2.13.10
 
 require (
-	github.com/faiface/beep v1.0.2
-	github.com/nsf/termbox-go v0.0.0-20200418040025-38ba6e5628f1
+	github.com/gdamore/encoding v1.0.1 // indirect
+	github.com/lucasb-eyer/go-colorful v1.3.0 // indirect
+	github.com/rivo/uniseg v0.4.7 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/term v0.37.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 )
