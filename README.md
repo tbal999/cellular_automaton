@@ -1,6 +1,6 @@
 # cellular_automaton
 
-last updated: 28/11/2026
+last updated: 25/11/2026 (9pm)
 
 A cellular automaton engine for the terminal that can run many 'Life'-like rules, including Conway's Game of Life (the default, B3/S23), in honour of John Horton Conway.
 It ships with ~40 preset rules, including Generations rules (cells fade through "dying" states, e.g. Brian's Brain), and you can type your own rules as well if you want to.
